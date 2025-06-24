@@ -1,34 +1,24 @@
-import fs from "fs"
-import puppeteer from "puppeteer"
+const puppeteer = await import("puppeteer");
+const fs = await import("fs/promises");
 
-import CREDENTIALS from "./credentials.json"
-import { COOKIES_JSON, IS_HEADLESS, LOGIN_URL, loadBrowser } from "./shared"
+const browser = await puppeteer.default.launch({
+  headless: false,
+  slowMo: 50,
+});
 
-const saveCookies = async () => {
-  try {
-    const cookies = await page.cookies()
+const page = await browser.newPage();
 
-    fs.writeFileSync(COOKIES_JSON, JSON.stringify(cookies, null, 2))
-    console.log("Saved cookies to", COOKIES_JSON)
-  } catch (error) {
-    console.error("Error saving cookies:", error)
-  }
-}
+await page.goto("https://ticket.melon.com/login/login.htm");
 
-const logIn = async () => {
-  await page.locator("#email").fill(CREDENTIALS.email)
-  await page.locator("#pwd").fill(CREDENTIALS.password)
-  await page.locator("#formSubmit").click()
+console.log("👋 Please log in manually in the browser window...");
 
-  await page.waitForNetworkIdle()
-}
+await page.waitForNavigation({ waitUntil: "networkidle2" });
 
-const browser = await puppeteer.launch({ headless: IS_HEADLESS })
-const page = await browser.newPage()
+// Save cookies after login
+const cookies = await page.cookies();
+await fs.writeFile("cookies.json", JSON.stringify(cookies, null, 2));
 
-await loadBrowser(page, LOGIN_URL)
+console.log("✅ Cookies saved to cookies.json");
 
-await logIn()
-await saveCookies()
+await browser.close();
 
-await browser.close()

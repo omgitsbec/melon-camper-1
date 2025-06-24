@@ -20,14 +20,14 @@ export const LOGIN_URL: string =
  * The link to your target concert, on the Melon Global website.
  */
 export const CONCERT_URL =
-  "https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId=210470"
+  "https://tkglobal.melon.com/performance/index.htm?langCd=EN&prodId=211530"
 
 /**
  * Sometimes, concerts run over multiple days.
  * For which of these days are you looking for tickets?
  * 0-indexed number.
  */
-export const NIGHT: number = 2
+export const NIGHT: number = 1
 
 /**
  * It's typically unlikely for the best tickets (for example, VIP/floor) to be found.
